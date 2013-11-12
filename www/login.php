@@ -27,7 +27,7 @@
 		  $_SESSION['id'] = $user_data['id'];
 		  $_SESSION['login'] = $user_data['login'];
 		  header ("location: home.php");
-	    }	  
+	    }
 	  }
     }
   }

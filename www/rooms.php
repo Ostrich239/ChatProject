@@ -27,12 +27,24 @@
 	  if ($_REQUEST['create']){
 	    $name = mysql_escape_string($_REQUEST['name']);
 		$type = mysql_escape_string($_REQUEST['type']);
-		mysql_query("
-		  INSERT INTO rooms SET
-		  type='1', name='$name'
-		");
-		$_SESSION['message'] = "You have registred room $name";
-		header ("location: rooms.php");
+		$res = mysql_query("
+		  SELECT id FROM room_type WHERE
+		  name='$type'
+		") or die(mysql_error());
+		$type_id_ar = mysql_fetch_assoc($res);
+		if (!$type_id_ar){
+		  $_SESSION['message'] = "There is no such type of rooms";
+		  header ("location: rooms.php");
+		}
+		else {
+		  $type_id = $type_id_ar['id'];
+		  mysql_query("
+		    INSERT INTO rooms SET
+		    type='$type_id', name='$name'
+		  ");
+		  $_SESSION['message'] = "You have registred room $name";
+		  header ("location: rooms.php");
+		}
 	  }
 	  else {
 	    if ($_REQUEST['join_name']){
@@ -77,6 +89,9 @@
 	  <td>Type:</td>
 	  <td><input type="text" name="type"></td>
 	  <td><input type="submit" name="create" value="Create"></td>
+	</tr>
+	<tr>
+	  <td><a href = "create_type.php">Create new type of rooms</a></td>
 	</tr>
   </table>
 </form>
