@@ -1,26 +1,38 @@
 <?php
-  if ($_REQUEST['login']){
-    require_once "connect.php";
-    $login = $_REQUEST['login'];
-	$res = mysql_query(
-	  'SELECT * FROM users WHERE login=\''.mysql_escape_string($login).'\'' 
-	);
-	$user_data = mysql_fetch_array($res, MYSQL_ASSOC);
-	if (!$user_data){
-	  echo "User with this login does not exist. Try again.</br>";
-    }
-	else {
-	  if ($_REQUEST['password'] != $user_data['password']){
-        echo 'Wrong password for user '.mysql_escape_string($user_data['login']).'</br>';
+  session_start();
+  if (isset($_SESSION['message'])){
+    require_once "head.php";
+	echo $_SESSION['message'];
+	unset($_SESSION['message']);
+  }
+  else {
+    if ($_REQUEST['login']){
+      require_once "connect.php";
+      $login = mysql_escape_string($_REQUEST['login']);
+	  $res = mysql_query("
+	    SELECT * FROM users WHERE 
+	    login='$login'
+	  ");
+	  $user_data = mysql_fetch_array($res, MYSQL_ASSOC);
+	  if (!$user_data){
+	    $_SESSION['message'] = "User with this login does not exist. Try again.</br>";
+		header ("location: login.php");
+      }
+	  else {
+	    if ($_REQUEST['password'] != $user_data['password']){
+	      $_SESSION['message'] = 'Wrong password for user '.mysql_escape_string($user_data['login']).'</br>';
+		  header ("location: login.php");
+	    }
+        else {
+		  $_SESSION['id'] = $user_data['id'];
+		  $_SESSION['login'] = $user_data['login'];
+		  header ("location: home.php");
+	    }	  
 	  }
-      else {
-        session_start();
-		$_SESSION['login'] = $user_data['login'];
-		header ("location: home.php");
-	  }	  
-	}
+    }
   }
 ?>
+<?require_once "head.php"?>
 Insert your login and password:</br>
 <form action="login.php" method=post>
   <table>
@@ -39,3 +51,25 @@ Insert your login and password:</br>
   </table>
 </form>
 <a href = "register.php">Registration on site</a>
+<?require_once "tail.php"?>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

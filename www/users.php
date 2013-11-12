@@ -1,10 +1,9 @@
 <?php
   session_start();
-  if ($_REQUEST['find']{
-    header ("location: ");
-  }
+  
 ?>
-<form action="edit_personal.php" method=post>
+<?include_once "head.php"?>													// Не забыть эту строчку продублировать или перенести наверх туда, где будет начинаться вывод
+<form action="users.php" method=post>
   <table>
     <tr>
 	  <td>Whom would you like to find</td>
@@ -17,3 +16,4 @@
   </table>
 </form>
 <a href = "home.php">To home page</a>
+<?include_once "tail.php"?>

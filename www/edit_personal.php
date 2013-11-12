@@ -2,22 +2,23 @@
   session_start();
   if ($_REQUEST['edit']){
     require_once ("connect.php");
-	mysql_query (
-	  'CREATE TABLE IF NOT EXISTS users_personals (
-	  login TEXT,
-	  status TEXT,
-	  personal_info TEXT
-	  )'
-	);
-	$status = $_REQUEST['status'];
-	$info = $_REQUESR['personal_info'];
-	$login = $_SESSION['login'];
-	mysql_query(
-	  'INSERT INTO users SET login=\''.mysql_escape_string($login).'\', status=\''.$status.'\', personal_info=\''.$info.'\''
-	);
+	$status = mysql_escape_string($_REQUEST['status']);
+	$info = mysql_escape_string($_REQUEST['personal_info']);
+	$id = mysql_escape_string($_SESSION['id']);
+	mysql_query("
+	  UPDATE users_personals SET 
+	  status='$status', personal_info='$info' 
+	  WHERE
+	  id='$id'
+	") or die(mysql_error());
+	require_once "head.php";	
 	echo "Your personal settings have been successfully changed";
   }
+  else {
+    require_once "head.php";
+  }
 ?>
+<?require_once "head.php"?>
 <form action="edit_personal.php" method=post>
   <table>
     <tr>
@@ -35,3 +36,4 @@
   </table>
 </form>
 <a href = "home.php">To home page</a>
+<?require_once "tail.php"?>
