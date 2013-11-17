@@ -23,9 +23,7 @@ function standartWorkWithMessage() {
   if (sessionMessageSetted()) {
     showSessionMessage();
     unsetSessionMessage();
-  } else {
-    echo "no session message <br>";
-  }
+  } 
 }
 
 
