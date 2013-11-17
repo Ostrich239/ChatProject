@@ -1,0 +1,39 @@
+# Здесь я записал несколько частоиспользуемых функций
+# Предполагается include этого файла в пхп-код
+
+function sessionMessageSetted () {
+  return isset($_SESSION['message']);
+}
+
+function showSessionMessage () {
+  echo $_SESSION['meaasge'];
+  echo "<br>";
+}
+
+function unsetSessionMessage () {
+  unset($_SESSION['message']);
+}
+
+function standartWorkWithMessage() {
+  if (sessionMessageSetted) {
+    showSessionMeaasge();
+    unsetSessionMessage();
+  }
+}
+
+
+function connectDB () {
+  require_once ("connect.php");
+}
+
+function getUserByLogin ($login) {
+  return mysql_fetch_assoc(mysql_query("
+  SELECT * FROM users WHERE
+    login = \'$login\'
+  ");
+}
+
+function setSessionMessage ($msg) {
+  $_SESSION['message'] = $msg;
+}
+
